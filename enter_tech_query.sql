@@ -39,7 +39,7 @@ FROM
     JOIN mdl_role_assignments ra ON ra.userid = u.id
     JOIN mdl_role r ON r.id = ra.roleid
     JOIN mdl_user_enrolments mue ON mue.userid = u.id
-    JOIN mdl_erol e ON e.id = ue.enrolid 
+    JOIN mdl_enrol e ON e.id = ue.enrolid 
 WHERE 
     u.confirmed = 1
     AND u.deleted = 0
