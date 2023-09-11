@@ -43,10 +43,10 @@ FROM
     JOIN mdl_role r ON r.id = ra.roleid
     JOIN mdl_user_enrolments mue ON mue.userid = u.id
     JOIN mdl_enrol e ON e.id = mue.enrolid 
-    JOIN enter_tech.user_code uc ON uc.moodle_id = u.id
 WHERE 
     u.confirmed = 1
     AND u.deleted = 0
     AND u.suspended = 0
     AND LOWER(r.name) = 'enternauta'
-    AND e.courseid IN (832);
+    AND e.courseid IN (832)
+GROUP BY u.id;
