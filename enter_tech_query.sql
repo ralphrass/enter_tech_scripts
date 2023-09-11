@@ -33,13 +33,17 @@ SELECT
     (SELECT COUNT(distinct from_unixtime(gg.timemodified, '%Y%m%d')) / datediff( from_unixtime(max(gg.timemodified)), from_unixtime(min(gg.timemodified)) ) from mdl_grade_grades gg where gg.userid = u.id and gg.aggregationstatus = 'used') as vl_grades_engagement,
     (SELECT COUNT(1) from mdl_grade_grades gg where gg.userid = u.id and gg.aggregationstatus = 'used') as n_items_graded,
     (SELECT COUNT(1) from mdl_grade_grades gg where userid = u.id and gg.aggregationstatus != 'used') as n_items_not_responded,
-    (SELECT AVG(gg.rawgrade / gg.rawgrademax) from mdl_grade_grades gg where gg.userid = u.id and gg.aggregationstatus = 'used') as vl_grade_average
+    (SELECT AVG(gg.rawgrade / gg.rawgrademax) from mdl_grade_grades gg where gg.userid = u.id and gg.aggregationstatus = 'used') as vl_grade_average,
+    (SELECT COUNT(1) from enter_tech.user_code uc where uc.moodle_id = u.id) as n_code_submissions,
+    (SELECT COUNT(1) / datediff(max(uc.event_time), min(uc.event_time)) from enter_tech.user_code uc where uc.moodle_id = u.id) as vl_avg_code_submissions,
+    (SELECT COUNT(1) / COUNT(distinct date(uc.event_time)) from enter_tech.user_code uc where uc.moodle_id = u.id) as vl_submissions_by_days_active
 FROM 
     mdl_user u 
     JOIN mdl_role_assignments ra ON ra.userid = u.id
     JOIN mdl_role r ON r.id = ra.roleid
     JOIN mdl_user_enrolments mue ON mue.userid = u.id
     JOIN mdl_enrol e ON e.id = mue.enrolid 
+    JOIN enter_tech.user_code uc ON uc.moodle_id = u.id
 WHERE 
     u.confirmed = 1
     AND u.deleted = 0
