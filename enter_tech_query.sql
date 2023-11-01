@@ -1,5 +1,6 @@
 SELECT 
     u.id as id_user,
+    u.email,
     u.city as ds_user_city,
     u.institution as ds_institution,
     u.firstaccess as ts_firstaccess,
